@@ -1,13 +1,14 @@
 <template>
-  <div class="login">
-    <img alt="Vue logo" src="../assets/logo.png" />
-  </div>
-  <form>
-    <label for="email">Email address</label>
-    <input id="email" type="email" />
-    <label for="password">Password</label>
-    <input type="password" id="password" />
-    <button type="submit">Log in</button>
+  <form class="pt-4">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" />
+    </div>
+    <button type="submit" class="btn btn-success">Log in</button>
   </form>
 </template>
 
