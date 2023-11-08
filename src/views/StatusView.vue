@@ -42,9 +42,13 @@ import { Service } from "@/interfaces/service";
 const services = ref<Service[]>([]);
 axios.get<SystemStatusHealtResponse>(API_URL).then((response) => {
   const responseServices = response.data.services;
-  services.value = Object.keys(responseServices).map((name): Service => {
-    const servcie = Object(responseServices)[name] as SystemStatusHealtService;
-    return { name, status: servcie.healthStatus };
-  });
+  services.value = Object.keys(responseServices)
+    .sort()
+    .map((name): Service => {
+      const servcie = Object(responseServices)[
+        name
+      ] as SystemStatusHealtService;
+      return { name, status: servcie.healthStatus };
+    });
 });
 </script>

@@ -2,7 +2,20 @@
   <form class="pt-4">
     <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="email" v-model="email" />
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        v-model="state.email"
+        required
+      />
+      <div
+        class="text-danger"
+        v-for="error of vuelidate$.email.$silentErrors"
+        :key="error.$uid"
+      >
+        {{ error.$message }}
+      </div>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
@@ -10,14 +23,22 @@
         type="password"
         class="form-control"
         id="password"
-        v-model="password"
+        v-model="state.password"
+        required
       />
+      <div
+        class="text-danger"
+        v-for="error of vuelidate$.password.$silentErrors"
+        :key="error.$uid"
+      >
+        {{ error.$message }}
+      </div>
     </div>
     <button
       type="submit"
       class="btn btn-success"
+      :disabled="vuelidate$.$invalid"
       v-on:click.prevent="login()"
-      :disabled="!email || !password"
     >
       Log in
     </button>
@@ -26,10 +47,20 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { ref } from "vue";
+import { reactive } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
 
-const email = ref("");
-const password = ref("");
+const state = reactive({
+  email: "",
+  password: "",
+});
+const rules = {
+  email: { required, email },
+  password: { required },
+};
+
+const vuelidate$ = useVuelidate(rules, state);
 
 function login() {
   router.push("/status");
