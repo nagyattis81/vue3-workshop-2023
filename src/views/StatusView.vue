@@ -27,6 +27,12 @@
       </tr>
     </tbody>
   </table>
+  <button
+    class="btn btn-secondary"
+    v-on:click.prevent="AuthenticationService.logout()"
+  >
+    Log out
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +44,7 @@ import {
   SystemStatusHealtService,
 } from "@/interfaces/system-status.healt.response";
 import { Service } from "@/interfaces/service";
+import AuthenticationService from "@/services/authentication.service";
 
 const services = ref<Service[]>([]);
 axios.get<SystemStatusHealtResponse>(API_URL).then((response) => {
