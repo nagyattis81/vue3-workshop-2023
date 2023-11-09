@@ -1,4 +1,10 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  NavigationGuardNext,
+  RouteLocationNormalized,
+  RouteRecordRaw,
+} from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import {
   LOGIN_PATH,
@@ -8,22 +14,45 @@ import {
   STATUS_ROUTE,
   STATUS_TITLE,
 } from "@/constants/routes";
+import AuthenticationService from "@/services/authentication.service";
+
+function statusGuard(
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  if (AuthenticationService.isAuthenticated()) {
+    next();
+  } else {
+    next(LOGIN_PATH);
+  }
+}
+
+function loginGuard(
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) {
+  if (AuthenticationService.isAuthenticated()) {
+    next(STATUS_PATH);
+  } else {
+    next();
+  }
+}
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: LOGIN_PATH,
     name: LOGIN_ROUTE,
+    beforeEnter: loginGuard,
     component: LoginView,
     meta: { title: LOGIN_TITLE },
   },
   {
     path: STATUS_PATH,
     name: STATUS_ROUTE,
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/StatusView.vue"),
+    beforeEnter: statusGuard,
+    component: () => import("../views/StatusView.vue"),
     meta: { title: STATUS_TITLE },
   },
 ];
@@ -33,12 +62,18 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, _, next) => {
-  const title = to.meta.title as string;
-  if (title) {
-    document.title = title;
+router.beforeEach(
+  (
+    to: RouteLocationNormalized,
+    _: RouteLocationNormalized,
+    next: NavigationGuardNext
+  ) => {
+    const title = to.meta.title as string;
+    if (title) {
+      document.title = title;
+    }
+    next();
   }
-  next();
-});
+);
 
 export default router;

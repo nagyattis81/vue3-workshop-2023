@@ -38,7 +38,7 @@
       type="submit"
       class="btn btn-success"
       :disabled="vuelidate$.$invalid"
-      v-on:click.prevent="login()"
+      v-on:click.prevent="AuthenticationService.login()"
     >
       Log in
     </button>
@@ -46,10 +46,10 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
 import { reactive } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
+import AuthenticationService from "@/services/authentication.service";
 
 const state = reactive({
   email: "",
@@ -61,8 +61,4 @@ const rules = {
 };
 
 const vuelidate$ = useVuelidate(rules, state);
-
-function login() {
-  router.push("/status");
-}
 </script>
