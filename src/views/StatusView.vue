@@ -39,22 +39,18 @@
 import { ref } from "vue";
 import axios from "axios";
 import { API_URL } from "@/constants/api";
-import {
-  SystemStatusHealtResponse,
-  SystemStatusHealtService,
-} from "@/interfaces/system-status.healt.response";
+import { SystemStatusHealtResponse } from "@/interfaces/system-status.healt.response";
 import { Service } from "@/interfaces/service";
 import AuthenticationService from "@/services/authentication.service";
+import { ServiceStatusType } from "@/types/service-status-type";
 
 const services = ref<Service[]>([]);
 axios.get<SystemStatusHealtResponse>(API_URL).then((response) => {
   const responseServices = response.data.services;
   services.value = Object.keys(responseServices)
     .sort()
-    .map((name): Service => {
-      const servcie = Object(responseServices)[
-        name
-      ] as SystemStatusHealtService;
+    .map((name) => {
+      const servcie = responseServices[name as ServiceStatusType];
       return { name, status: servcie.healthStatus };
     });
 });

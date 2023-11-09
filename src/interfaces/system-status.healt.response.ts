@@ -1,15 +1,11 @@
+import { HealthStatus } from "@/types/healt-status";
+import { ServiceStatusType } from "@/types/service-status-type";
+
 export interface SystemStatusHealtService {
-  updatedAt: string;
-  healthStatus: string;
+  readonly updatedAt: string;
+  readonly healthStatus: HealthStatus;
 }
 
 export interface SystemStatusHealtResponse {
-  services: {
-    registration: SystemStatusHealtService;
-    transfer: SystemStatusHealtService;
-    trx: SystemStatusHealtService;
-    push: SystemStatusHealtService;
-    login: SystemStatusHealtService;
-    testService: SystemStatusHealtService;
-  };
+  readonly services: Record<ServiceStatusType, SystemStatusHealtService>;
 }
