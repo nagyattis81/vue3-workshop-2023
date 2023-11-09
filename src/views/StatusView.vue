@@ -16,12 +16,12 @@
         <td>{{ service.name }}</td>
         <td>
           <i
-            v-if="service.status === 'UP'"
-            class="bi bi-check-circle-fill text-success"
-          ></i>
-          <i
-            v-if="service.status === 'DOWN'"
-            class="bi bi-x-circle-fill text-danger"
+            class="bi"
+            :class="
+              service.status === 'UP'
+                ? ['bi-check-circle-fill', 'text-success']
+                : ['bi-x-circle-fill', 'text-danger']
+            "
           ></i>
         </td>
       </tr>
